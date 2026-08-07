@@ -1,0 +1,42 @@
+{
+  "name": "fanfares",
+  "version": "1.0.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "node scripts/start-expo.js start",
+    "android": "node scripts/start-expo.js start --android",
+    "ios": "node scripts/start-expo.js start --ios",
+    "web": "node scripts/start-expo.js start --web",
+    "create-demo-user": "node scripts/create-demo-user.js",
+    "deploy": "zsh scripts/deploy.sh"
+  },
+  "dependencies": {
+    "@react-native-community/datetimepicker": "8.2.0",
+    "@supabase/supabase-js": "^2.111.0",
+    "expo": "~52.0.0",
+    "expo-asset": "~11.0.5",
+    "expo-constants": "~17.0.0",
+    "expo-file-system": "~18.0.12",
+    "expo-linking": "~7.0.0",
+    "expo-print": "~14.0.3",
+    "expo-router": "~4.0.0",
+    "expo-sharing": "~13.0.1",
+    "expo-status-bar": "~2.0.0",
+    "nanoid": "^3.3.16",
+    "pdf-lib": "^1.17.1",
+    "react": "^18.3.1",
+    "react-native": "^0.76.9",
+    "react-native-gesture-handler": "~2.20.2",
+    "react-native-safe-area-context": "4.12.0",
+    "react-native-screens": "~4.4.0",
+    "react-native-web": "~0.19.13"
+  },
+  "devDependencies": {
+    "@types/react": "~18.3.0",
+    "typescript": "~5.6.3"
+  },
+  "allowScripts": {
+    "fsevents@2.3.3": true
+  }
+}
