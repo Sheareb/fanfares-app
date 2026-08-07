@@ -230,6 +230,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 16,
   },
+  stateText: {
+    marginTop: 10,
+    color: "#475569",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  errorCard: {
+    backgroundColor: "#fff1f2",
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#fecdd3",
+    marginBottom: 16,
+  },
   errorText: {
     color: "#b91c1c",
     fontSize: 13,
@@ -240,6 +253,17 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 6 },
     elevation: 3,
+  },
+  sectionCard: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 10,
+    shadowColor: "#1f2937",
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 2,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -262,10 +286,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "700",
     textAlign: "center",
-  },
-  sectionEmptyText: {
-    color: "#6b7280",
-    fontSize: 14,
   },
   row: {
     backgroundColor: "#f8fafc",
@@ -291,13 +311,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: "#6b7280",
     fontWeight: "600",
-  },
-  saveButton: {
-    backgroundColor: "#5b6bff",
-    borderRadius: 14,
-    paddingVertical: 14,
-    alignItems: "center",
-    marginTop: 24,
   },
   backIconButton: {
     alignSelf: "center",

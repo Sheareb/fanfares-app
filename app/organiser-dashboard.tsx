@@ -752,22 +752,6 @@ const styles = StyleSheet.create({
     width: 44,
     alignItems: "flex-end",
   },
-  primaryButton: {
-    backgroundColor: "#2563eb",
-    borderRadius: 16,
-    paddingVertical: 18,
-    alignItems: "center",
-    shadowColor: "#2563eb",
-    shadowOpacity: 0.22,
-    shadowRadius: 14,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 4,
-  },
-  primaryButtonText: {
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "700",
-  },
   toggleGroup: {
     flexDirection: "row",
     gap: 8,

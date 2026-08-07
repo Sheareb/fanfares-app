@@ -1,0 +1,17 @@
+node_modules
+# Supabase
+.branches
+.temp
+
+# dotenvx
+.env
+.env.*
+.env.keys
+.env.local
+.env.*.local
+
+# Expo build output
+dist/
+
+# Expo local workspace
+.expo/

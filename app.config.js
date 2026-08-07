@@ -5,13 +5,12 @@ export default {
     slug: "fanfares",
     scheme: "fanfares",
     newArchEnabled: true,
-    platforms: ["ios", "android", "web"],
+    platforms: ["ios", "android"],
     plugins: [
       "expo-router",
       "@react-native-community/datetimepicker",
       "expo-asset",
     ],
-    web: { bundler: "metro" },
     extra: {
       supabaseUrl:
         process.env.EXPO_PUBLIC_SUPABASE_URL || "http://127.0.0.1:54321",

@@ -509,22 +509,6 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#dc2626",
   },
-  stateCard: {
-    backgroundColor: "#fff",
-    borderRadius: 24,
-    padding: 24,
-    shadowColor: "#1f2a44",
-    shadowOpacity: 0.08,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 4,
-    marginBottom: 24,
-    gap: 10,
-  },
-  stateText: {
-    color: "#4b5563",
-    fontSize: 15,
-  },
   emptyText: {
     color: "#4b5563",
     fontSize: 15,

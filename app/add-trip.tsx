@@ -71,7 +71,6 @@ function sortPickupPointsByTime(points: PickupPoint[]) {
 export default function AddTripScreen() {
   const [description, setDescription] = useState("");
   const [departureDate, setDepartureDate] = useState<Date | null>(null);
-  const [departureDateWeb, setDepartureDateWeb] = useState("");
   const [showDepartureDatePicker, setShowDepartureDatePicker] = useState(false);
   const [departureTime, setDepartureTime] = useState("");
   const [showDepartureTimePicker, setShowDepartureTimePicker] = useState(false);
@@ -378,12 +377,9 @@ export default function AddTripScreen() {
       return;
     }
 
-    const normalizedDepartureDate =
-      Platform.OS === "web"
-        ? departureDateWeb.trim()
-        : departureDate
-          ? formatDateToIso(departureDate)
-          : "";
+    const normalizedDepartureDate = departureDate
+      ? formatDateToIso(departureDate)
+      : "";
 
     if (!normalizedDepartureDate) {
       setFeedback("Please choose a departure date.");
@@ -556,7 +552,6 @@ export default function AddTripScreen() {
       setFeedbackType("success");
       setDescription("");
       setDepartureDate(null);
-      setDepartureDateWeb("");
       setShowDepartureDatePicker(false);
       setDepartureTime("");
       setShowDepartureTimePicker(false);
@@ -637,116 +632,65 @@ export default function AddTripScreen() {
             />
 
             <Text style={styles.label}>Departure date</Text>
-            {Platform.OS === "web" ? (
-              <View style={styles.input}>
-                <input
-                  type="date"
-                  value={departureDateWeb}
-                  min={formatDateToIso(minDepartureDate)}
-                  onChange={(event) => {
-                    const value = event.currentTarget.value;
-                    setDepartureDateWeb(value);
-                    setDepartureDate(parseIsoDate(value));
-                    if (feedback) {
-                      setFeedback(null);
-                      setFeedbackType(null);
-                    }
-                  }}
-                  style={{
-                    width: "100%",
-                    border: "none",
-                    outline: "none",
-                    backgroundColor: "transparent",
-                    color: "#132238",
-                    fontSize: 15,
-                  }}
-                />
-              </View>
-            ) : (
-              <>
-                <Pressable
-                  style={styles.input}
-                  onPress={() =>
-                    setShowDepartureDatePicker((current) => !current)
-                  }
+            <>
+              <Pressable
+                style={styles.input}
+                onPress={() =>
+                  setShowDepartureDatePicker((current) => !current)
+                }
+              >
+                <Text
+                  style={[
+                    styles.inputValueText,
+                    !departureDate && styles.inputPlaceholderText,
+                  ]}
                 >
-                  <Text
-                    style={[
-                      styles.inputValueText,
-                      !departureDate && styles.inputPlaceholderText,
-                    ]}
-                  >
-                    {departureDate
-                      ? formatDateForDisplay(departureDate)
-                      : "Select departure date"}
-                  </Text>
-                </Pressable>
+                  {departureDate
+                    ? formatDateForDisplay(departureDate)
+                    : "Select departure date"}
+                </Text>
+              </Pressable>
 
-                {showDepartureDatePicker ? (
-                  <DateTimePicker
-                    value={departureDate ?? new Date()}
-                    mode="date"
-                    display={Platform.OS === "ios" ? "spinner" : "default"}
-                    minimumDate={minDepartureDate}
-                    onChange={onDepartureDateChange}
-                  />
-                ) : null}
-              </>
-            )}
+              {showDepartureDatePicker ? (
+                <DateTimePicker
+                  value={departureDate ?? new Date()}
+                  mode="date"
+                  display={Platform.OS === "ios" ? "spinner" : "default"}
+                  minimumDate={minDepartureDate}
+                  onChange={onDepartureDateChange}
+                />
+              ) : null}
+            </>
 
             <Text style={styles.label}>Departure time</Text>
-            {Platform.OS === "web" ? (
-              <View style={styles.input}>
-                <input
-                  type="time"
-                  value={departureTime}
-                  onChange={(event) => {
-                    setDepartureTime(event.currentTarget.value);
-                    if (feedback) {
-                      setFeedback(null);
-                      setFeedbackType(null);
-                    }
-                  }}
-                  style={{
-                    width: "100%",
-                    border: "none",
-                    outline: "none",
-                    backgroundColor: "transparent",
-                    color: "#132238",
-                    fontSize: 15,
-                  }}
-                />
-              </View>
-            ) : (
-              <>
-                <Pressable
-                  style={styles.input}
-                  onPress={() =>
-                    setShowDepartureTimePicker((current) => !current)
-                  }
+            <>
+              <Pressable
+                style={styles.input}
+                onPress={() =>
+                  setShowDepartureTimePicker((current) => !current)
+                }
+              >
+                <Text
+                  style={[
+                    styles.inputValueText,
+                    !departureTime && styles.inputPlaceholderText,
+                  ]}
                 >
-                  <Text
-                    style={[
-                      styles.inputValueText,
-                      !departureTime && styles.inputPlaceholderText,
-                    ]}
-                  >
-                    {departureTime
-                      ? formatTimeForDisplay(departureTime)
-                      : "Select departure time"}
-                  </Text>
-                </Pressable>
+                  {departureTime
+                    ? formatTimeForDisplay(departureTime)
+                    : "Select departure time"}
+                </Text>
+              </Pressable>
 
-                {showDepartureTimePicker ? (
-                  <DateTimePicker
-                    value={getDepartureTimePickerValue()}
-                    mode="time"
-                    display={Platform.OS === "ios" ? "spinner" : "default"}
-                    onChange={onDepartureTimeChange}
-                  />
-                ) : null}
-              </>
-            )}
+              {showDepartureTimePicker ? (
+                <DateTimePicker
+                  value={getDepartureTimePickerValue()}
+                  mode="time"
+                  display={Platform.OS === "ios" ? "spinner" : "default"}
+                  onChange={onDepartureTimeChange}
+                />
+              ) : null}
+            </>
 
             <Text style={styles.label}>Total cost (optional)</Text>
             <TextInput
@@ -866,32 +810,6 @@ export default function AddTripScreen() {
                         ? formatTimeForDisplay(departureTime)
                         : "Set departure time above"}
                     </Text>
-                  </View>
-                ) : Platform.OS === "web" ? (
-                  <View style={styles.pickupInput}>
-                    <input
-                      type="time"
-                      value={point.time}
-                      onChange={(event) => {
-                        updatePickupPoint(
-                          point.id,
-                          "time",
-                          event.currentTarget.value,
-                        );
-                        if (feedback) {
-                          setFeedback(null);
-                          setFeedbackType(null);
-                        }
-                      }}
-                      style={{
-                        width: "100%",
-                        border: "none",
-                        outline: "none",
-                        backgroundColor: "transparent",
-                        color: "#132238",
-                        fontSize: 15,
-                      }}
-                    />
                   </View>
                 ) : (
                   <>

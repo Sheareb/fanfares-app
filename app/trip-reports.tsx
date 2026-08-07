@@ -7,7 +7,6 @@ import React, { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Linking,
-  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -908,32 +907,6 @@ export default function TripReportsScreen() {
         logoSrc,
         generatedAtLabel,
       });
-
-      if (Platform.OS === "web") {
-        const previewUrl = await generateWebPdfPreview({
-          tripDescription: reportTripDescription,
-          departureLabel,
-          totalCostLabel,
-          seatCountLabel,
-          seatsBookedLabel: String(seatsBooked),
-          seatPriceLabel,
-          totalReceivedLabel,
-          outstandingLabel,
-          travellerCount: rows.length,
-          paidCount,
-          groups,
-          logoSrc,
-          generatedAtLabel,
-        });
-
-        const popup = (globalThis as any).open?.(previewUrl, "_blank");
-        if (!popup) {
-          await Linking.openURL(previewUrl);
-        }
-
-        setMessage("PDF preview opened.");
-        return;
-      }
 
       const result = await Print.printToFileAsync({
         html,
