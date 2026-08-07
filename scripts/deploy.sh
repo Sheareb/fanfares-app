@@ -13,9 +13,9 @@ error() { echo "${RED}✖ $1${NC}"; exit 1; }
 
 # ── 1. Must be on dev ────────────────────────────────────────────────────────
 CURRENT=$(git rev-parse --abbrev-ref HEAD)
-if [[ "$CURRENT" != "dev" ]]; then
-  warn "You are on '$CURRENT', switching to dev..."
-  git checkout dev
+if [[ "$CURRENT" != "brian" ]]; then
+  warn "You are on '$CURRENT', switching to brian..."
+  git checkout brian
 fi
 
 # ── 2. Prompt for commit message ─────────────────────────────────────────────
@@ -49,7 +49,7 @@ git pull origin main
 
 # ── 5. Merge dev into main and push DB schema ───────────────────────────────
 info "Merging dev into main..."
-git merge dev --no-edit
+git merge brian --no-edit
 
 if [[ ! -f "supabase/.temp/project-ref" ]]; then
   error "Supabase project is not linked. Run: npx supabase link"
@@ -64,8 +64,8 @@ info "Pushing main branch..."
 git push origin main
 
 # ── 7. Switch back to dev ────────────────────────────────────────────────────
-info "Switching back to dev..."
-git checkout dev
+info "Switching back to brian..."
+git checkout brian
 
 echo ""
 info "Deploy complete! 🎺"

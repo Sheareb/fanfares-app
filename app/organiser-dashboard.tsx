@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Modal,
+  PanResponder,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -477,11 +478,25 @@ export default function HomeScreen() {
     const tripDescription = String(trip.description || "Trip");
     const hasBookings = (trip.seats_booked ?? 0) > 0;
     const isDeleting = deletingTripMap[tripId] ?? false;
+    const swipeResponder = PanResponder.create({
+      onStartShouldSetPanResponder: () => !hasBookings,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return (
+          !hasBookings && Math.abs(gestureState.dx) > Math.abs(gestureState.dy)
+        );
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (!hasBookings && gestureState.dx < -90) {
+          handleDeleteTrip(trip);
+        }
+      },
+    });
 
     return (
       <View
         key={trip.trip_id || String(index)}
         style={styles.tripCardContainer}
+        {...swipeResponder.panHandlers}
       >
         <Pressable
           style={styles.tripCardPressable}
@@ -538,6 +553,10 @@ export default function HomeScreen() {
             ) : null}
             {seatPrice ? (
               <Text style={styles.tripPrice}>{seatPrice} per seat</Text>
+            ) : null}
+
+            {!hasBookings ? (
+              <Text style={styles.swipeHint}>Swipe left to delete</Text>
             ) : null}
 
             {pickupPoints.length > 0 ? (
@@ -971,6 +990,12 @@ const styles = StyleSheet.create({
     color: "#1f2a44",
     fontWeight: "700",
     marginTop: 4,
+  },
+  swipeHint: {
+    fontSize: 12,
+    color: "#64748b",
+    marginTop: 8,
+    fontStyle: "italic",
   },
   pickupList: {
     marginTop: 12,
