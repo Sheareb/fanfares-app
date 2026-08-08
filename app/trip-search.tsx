@@ -337,37 +337,72 @@ export default function TripSearchResultsScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Trip Search</Text>
-
-        <View style={styles.searchRow}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="e.g. coast, airport, weekend"
-            value={searchText}
-            onChangeText={(value) => {
-              setSearchText(value);
-              if (errorMessage) {
-                setErrorMessage(null);
-              }
-            }}
-            onSubmitEditing={searchTrips}
-            returnKeyType="search"
-          />
-          <Pressable
-            style={[
-              styles.searchButton,
-              loading && styles.searchButtonDisabled,
-            ]}
-            onPress={searchTrips}
-            disabled={loading}
-          >
-            <Text style={styles.searchButtonText}>Search</Text>
-          </Pressable>
+        <View style={styles.heroCard}>
+          <View style={styles.heroBadge}>
+            <Text style={styles.heroBadgeText}>Discover</Text>
+          </View>
+          <Text style={styles.title}>Find your next departure</Text>
+          <Text style={styles.subtitle}>
+            Search by route, destination, or the feel of the day and book in a
+            few taps.
+          </Text>
+          <View style={styles.heroStats}>
+            <View style={styles.heroStatChip}>
+              <Text style={styles.heroStatLabel}>Fast booking</Text>
+            </View>
+            <View style={styles.heroStatChip}>
+              <Text style={styles.heroStatLabel}>Flexible pickup</Text>
+            </View>
+          </View>
         </View>
 
-        <Pressable style={styles.backIconButton} onPress={() => router.back()}>
-          <Text style={styles.backIconText}>←</Text>
-        </Pressable>
+        <View style={styles.searchCard}>
+          <Text style={styles.helperText}>
+            Try searching by route, destination, or time of day to quickly find
+            a suitable trip.
+          </Text>
+
+          <View style={styles.searchRow}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="e.g. coast, airport, weekend"
+              value={searchText}
+              onChangeText={(value) => {
+                setSearchText(value);
+                if (errorMessage) {
+                  setErrorMessage(null);
+                }
+              }}
+              onSubmitEditing={searchTrips}
+              returnKeyType="search"
+            />
+            <Pressable
+              style={[
+                styles.searchButton,
+                loading && styles.searchButtonDisabled,
+              ]}
+              onPress={searchTrips}
+              disabled={loading}
+            >
+              <Text style={styles.searchButtonText}>Search</Text>
+            </Pressable>
+          </View>
+        </View>
+
+        <View style={styles.inlineActions}>
+          <Pressable
+            style={styles.backIconButton}
+            onPress={() => router.back()}
+          >
+            <Text style={styles.backIconText}>←</Text>
+          </Pressable>
+          <Pressable
+            style={styles.quickActionButton}
+            onPress={() => router.push("/(customer-tabs)/bookings")}
+          >
+            <Text style={styles.quickActionText}>My bookings</Text>
+          </Pressable>
+        </View>
 
         {loading ? (
           <View style={styles.stateCard}>
@@ -378,7 +413,14 @@ export default function TripSearchResultsScreen() {
           <View style={styles.stateCard}>
             <Text style={styles.errorText}>{errorMessage}</Text>
           </View>
-        ) : !hasSearched ? null : activeTrips.length === 0 ? (
+        ) : !hasSearched ? (
+          <View style={styles.stateCard}>
+            <Text style={styles.emptyText}>
+              Start with a search to browse upcoming trips and compare the best
+              options.
+            </Text>
+          </View>
+        ) : activeTrips.length === 0 ? (
           <View style={styles.stateCard}>
             <Text style={styles.emptyText}>
               No active trips found for that description.
@@ -412,15 +454,19 @@ export default function TripSearchResultsScreen() {
                   })
                 }
               >
-                <View style={styles.tripHeader}>
-                  <Text style={styles.tripTitle}>
-                    {trip.description || "Untitled trip"}
-                  </Text>
+                <View style={styles.tripTopRow}>
                   <View style={styles.statusBadge}>
                     <Text style={styles.statusText}>
                       {getStatusLabel(trip)}
                     </Text>
                   </View>
+                  <Text style={styles.tripHint}>Tap to book</Text>
+                </View>
+
+                <View style={styles.tripHeader}>
+                  <Text style={styles.tripTitle}>
+                    {trip.description || "Untitled trip"}
+                  </Text>
                 </View>
 
                 <Text style={styles.tripMeta}>
@@ -428,7 +474,7 @@ export default function TripSearchResultsScreen() {
                 </Text>
                 {availableSeats !== null ? (
                   <Text style={styles.tripMeta}>
-                    Seats Available: {availableSeats}
+                    Seats left: {availableSeats}
                   </Text>
                 ) : null}
                 {trip.seat_count !== null && availableSeats !== null ? (
@@ -470,7 +516,7 @@ export default function TripSearchResultsScreen() {
 
                 {(bookedSeatsByTrip[trip.trip_id] ?? 0) > 0 ? (
                   <Text style={styles.tripBookedSeatsText}>
-                    you have {bookedSeatsByTrip[trip.trip_id]} seat
+                    You already have {bookedSeatsByTrip[trip.trip_id]} seat
                     {bookedSeatsByTrip[trip.trip_id] === 1 ? "" : "s"} booked
                   </Text>
                 ) : null}
@@ -486,32 +532,99 @@ export default function TripSearchResultsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f5f7fb",
+    backgroundColor: "#07111f",
   },
   container: {
     paddingTop: 24,
     paddingBottom: 36,
     padding: 24,
   },
+  heroCard: {
+    backgroundColor: "#fff",
+    borderRadius: 24,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.12,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4,
+  },
+  heroBadge: {
+    alignSelf: "flex-start",
+    backgroundColor: "#dbeafe",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 10,
+  },
+  heroBadgeText: {
+    color: "#1d4ed8",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
+  },
   title: {
     fontSize: 24,
     fontWeight: "800",
-    color: "#1f2a44",
-    marginBottom: 14,
+    color: "#0f172a",
+    marginBottom: 6,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#475569",
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  heroStats: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  heroStatChip: {
+    backgroundColor: "#f8fafc",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+  },
+  heroStatLabel: {
+    color: "#334155",
+    fontSize: 12,
+    fontWeight: "700",
+  },
+  searchCard: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3,
+  },
+  helperText: {
+    color: "#1d4ed8",
+    fontSize: 13,
+    lineHeight: 20,
+    marginBottom: 10,
   },
   searchRow: {
     gap: 10,
-    marginBottom: 10,
+    marginBottom: 4,
   },
   searchInput: {
-    backgroundColor: "#fff",
+    backgroundColor: "#f8fafc",
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: "#d7def0",
+    borderColor: "#dbe2f0",
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
-    color: "#1f2a44",
+    color: "#0f172a",
   },
   searchButton: {
     backgroundColor: "#2563eb",
@@ -527,20 +640,41 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
   },
+  inlineActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+    marginBottom: 20,
+  },
   backIconButton: {
-    alignSelf: "center",
     width: 44,
     height: 44,
     borderRadius: 999,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#2563eb",
-    marginBottom: 20,
     shadowColor: "#2563eb",
     shadowOpacity: 0.2,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 6 },
     elevation: 3,
+  },
+  quickActionButton: {
+    backgroundColor: "#fff",
+    borderRadius: 999,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 3,
+  },
+  quickActionText: {
+    color: "#0f172a",
+    fontSize: 14,
+    fontWeight: "700",
   },
   backIconText: {
     color: "#fff",
@@ -552,7 +686,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 24,
     padding: 24,
-    shadowColor: "#1f2a44",
+    shadowColor: "#0f172a",
     shadowOpacity: 0.08,
     shadowRadius: 18,
     shadowOffset: { width: 0, height: 10 },
@@ -576,35 +710,41 @@ const styles = StyleSheet.create({
   },
   tripCard: {
     backgroundColor: "#ffffff",
-    borderRadius: 18,
+    borderRadius: 20,
     padding: 18,
     marginBottom: 18,
     borderWidth: 1,
     borderColor: "#e5eaf3",
-    shadowColor: "#1f2a44",
-    shadowOpacity: 0.07,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.08,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 10 },
     elevation: 3,
   },
   tripCardPressed: {
-    opacity: 0.8,
+    opacity: 0.85,
   },
-  tripHeader: {
+  tripTopRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
-    gap: 12,
+    alignItems: "center",
     marginBottom: 10,
   },
+  tripHint: {
+    color: "#64748b",
+    fontSize: 12,
+    fontWeight: "700",
+  },
+  tripHeader: {
+    marginBottom: 8,
+  },
   tripTitle: {
-    flex: 1,
     fontSize: 18,
     fontWeight: "800",
-    color: "#1f2a44",
+    color: "#0f172a",
   },
   tripMeta: {
-    fontSize: 15,
+    fontSize: 14,
     color: "#334155",
     marginBottom: 4,
   },
@@ -630,7 +770,7 @@ const styles = StyleSheet.create({
   },
   tripPrice: {
     fontSize: 15,
-    color: "#1f2a44",
+    color: "#0f172a",
     fontWeight: "700",
     marginTop: 4,
   },
@@ -642,27 +782,27 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   pickupItem: {
-    fontSize: 15,
+    fontSize: 14,
     color: "#334155",
     marginBottom: 4,
   },
   tripBookedSeatsText: {
     alignSelf: "flex-end",
-    marginTop: 8,
-    color: "#1f2a44",
+    marginTop: 6,
+    color: "#0f172a",
     fontSize: 12,
     fontWeight: "700",
   },
   statusBadge: {
-    backgroundColor: "#2f9e44",
+    backgroundColor: "#2563eb",
     borderRadius: 10,
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     paddingVertical: 6,
   },
   statusText: {
     color: "#fff",
     fontWeight: "700",
-    fontSize: 13,
+    fontSize: 12,
     textTransform: "capitalize",
   },
 });

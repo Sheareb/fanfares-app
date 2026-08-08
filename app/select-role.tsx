@@ -19,6 +19,9 @@ export default function SelectRoleScreen() {
   const [userId, setUserId] = useState<string | null>(null);
   const [fullName, setFullName] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<"organiser" | "fan" | null>(
+    null,
+  );
 
   useEffect(() => {
     supabase?.auth.getUser().then(({ data }) => {
@@ -36,6 +39,7 @@ export default function SelectRoleScreen() {
   const selectRole = async (isOrganiser: boolean) => {
     if (!userId || !supabase) return;
 
+    setSelectedRole(isOrganiser ? "organiser" : "fan");
     setLoading(true);
 
     let { error } = await supabase.from("profiles").insert({
@@ -61,7 +65,7 @@ export default function SelectRoleScreen() {
     }
 
     router.replace(
-      isOrganiser ? "/organiser-dashboard" : "/customer_dashboard",
+      isOrganiser ? "/(organiser-tabs)/overview" : "/(customer-tabs)/home",
     );
   };
 
@@ -69,7 +73,7 @@ export default function SelectRoleScreen() {
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.center}>
-          <ActivityIndicator size="large" color="#5b6bff" />
+          <ActivityIndicator size="large" color="#2563eb" />
         </View>
       </SafeAreaView>
     );
@@ -78,32 +82,52 @@ export default function SelectRoleScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.title}>How will you use Fanfares?</Text>
-        <Text style={styles.subtitle}>
-          Choose your account type. You can only set this once.
-        </Text>
+        <View style={styles.heroCard}>
+          <Text style={styles.eyebrow}>Welcome to Fanfares</Text>
+          <Text style={styles.title}>How will you use Fanfares?</Text>
+          <Text style={styles.subtitle}>
+            Choose the journey that fits you best. You can always refine it
+            later.
+          </Text>
+          <View style={styles.heroHintRow}>
+            <View style={styles.heroHintPill}>
+              <Text style={styles.heroHintText}>Fast setup</Text>
+            </View>
+            <View style={styles.heroHintPill}>
+              <Text style={styles.heroHintText}>Mobile-first</Text>
+            </View>
+          </View>
+        </View>
 
         <Pressable
-          style={[styles.card, loading && styles.disabled]}
+          style={[
+            styles.card,
+            loading && styles.disabled,
+            selectedRole === "organiser" && styles.cardSelected,
+          ]}
           onPress={() => selectRole(true)}
           disabled={loading}
         >
           <Text style={styles.cardIcon}>🎺</Text>
-          <Text style={styles.cardTitle}>I'm an Organiser</Text>
+          <Text style={styles.cardTitle}>I’m an organiser</Text>
           <Text style={styles.cardDescription}>
-            Create and manage trips for fans to book.
+            Create, manage, and operate trips with a clear command centre.
           </Text>
         </Pressable>
 
         <Pressable
-          style={[styles.card, loading && styles.disabled]}
+          style={[
+            styles.card,
+            loading && styles.disabled,
+            selectedRole === "fan" && styles.cardSelected,
+          ]}
           onPress={() => selectRole(false)}
           disabled={loading}
         >
           <Text style={styles.cardIcon}>🎟️</Text>
-          <Text style={styles.cardTitle}>I'm a Fan</Text>
+          <Text style={styles.cardTitle}>I’m a fan</Text>
           <Text style={styles.cardDescription}>
-            Browse and book trips organised by others.
+            Browse, book, and keep every journey organised in one neat flow.
           </Text>
         </Pressable>
 
@@ -111,7 +135,7 @@ export default function SelectRoleScreen() {
           <ActivityIndicator
             style={styles.spinner}
             size="small"
-            color="#5b6bff"
+            color="#2563eb"
           />
         )}
       </View>
@@ -122,7 +146,7 @@ export default function SelectRoleScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f4f7ff",
+    backgroundColor: "#07111f",
   },
   center: {
     flex: 1,
@@ -134,30 +158,68 @@ const styles = StyleSheet.create({
     padding: 24,
     justifyContent: "center",
   },
-  title: {
-    fontSize: 28,
+  heroCard: {
+    backgroundColor: "rgba(255,255,255,0.1)",
+    borderRadius: 24,
+    padding: 20,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.16)",
+  },
+  heroHintRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginTop: 12,
+  },
+  heroHintPill: {
+    backgroundColor: "rgba(255,255,255,0.12)",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  heroHintText: {
+    color: "#fff",
+    fontSize: 12,
     fontWeight: "700",
-    color: "#132238",
+  },
+  eyebrow: {
+    color: "#bfdbfe",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
+    marginBottom: 6,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: "800",
+    color: "#fff",
     marginBottom: 8,
     textAlign: "center",
   },
   subtitle: {
     fontSize: 14,
-    color: "#6b7280",
-    marginBottom: 32,
+    color: "#cbd5e1",
+    marginBottom: 8,
     textAlign: "center",
+    lineHeight: 20,
   },
   card: {
     backgroundColor: "#fff",
-    borderRadius: 20,
+    borderRadius: 24,
     padding: 24,
     marginBottom: 16,
     alignItems: "center",
-    shadowColor: "#5b6bff",
-    shadowOpacity: 0.1,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 3,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.18,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4,
+  },
+  cardSelected: {
+    borderWidth: 2,
+    borderColor: "#2563eb",
   },
   disabled: {
     opacity: 0.5,
@@ -174,8 +236,9 @@ const styles = StyleSheet.create({
   },
   cardDescription: {
     fontSize: 14,
-    color: "#6b7280",
+    color: "#64748b",
     textAlign: "center",
+    lineHeight: 20,
   },
   spinner: {
     marginTop: 16,

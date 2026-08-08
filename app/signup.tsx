@@ -1,7 +1,6 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -79,16 +78,19 @@ export default function SignupScreen() {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.container}
       >
-        <View style={styles.logoContainer}>
-          <Image
-            source={require("../assets/images/fanfares_logo_white.png")}
-            style={styles.logo}
-            resizeMode="contain"
-          />
+        <View style={styles.heroSection}>
+          <Text style={styles.heroTitle}>Create your account</Text>
+          <Text style={styles.heroSubtitle}>
+            Join a faster, more personal travel experience built around your
+            plans.
+          </Text>
         </View>
+
         <View style={styles.card}>
-          <Text style={styles.title}>Create your account</Text>
-          <Text style={styles.subtitle}>Join Fanfares with a few details.</Text>
+          <Text style={styles.cardLabel}>Account details</Text>
+          <Text style={styles.subtitle}>
+            A few details and you’re ready to go.
+          </Text>
 
           {errorMessage ? (
             <View style={styles.errorBox}>
@@ -102,6 +104,9 @@ export default function SignupScreen() {
             value={name}
             onChangeText={setName}
             autoCapitalize="words"
+            autoComplete="name"
+            textContentType="name"
+            returnKeyType="next"
           />
 
           <TextInput
@@ -112,6 +117,9 @@ export default function SignupScreen() {
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
+            autoComplete="email"
+            textContentType="emailAddress"
+            returnKeyType="next"
           />
 
           <TextInput
@@ -120,6 +128,9 @@ export default function SignupScreen() {
             value={password}
             onChangeText={setPassword}
             secureTextEntry
+            autoComplete="new-password"
+            textContentType="newPassword"
+            returnKeyType="next"
           />
 
           <TextInput
@@ -128,15 +139,23 @@ export default function SignupScreen() {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry
+            autoComplete="new-password"
+            textContentType="newPassword"
+            returnKeyType="done"
+            onSubmitEditing={handleSignUp}
           />
 
           <Pressable
-            style={styles.primaryButton}
+            style={({ pressed }) => [
+              styles.primaryButton,
+              pressed && styles.primaryButtonPressed,
+              loading && styles.primaryButtonDisabled,
+            ]}
             onPress={handleSignUp}
             disabled={loading}
           >
             <Text style={styles.primaryButtonText}>
-              {loading ? "Creating account..." : "Sign up"}
+              {loading ? "Creating account..." : "Create account"}
             </Text>
           </Pressable>
 
@@ -155,41 +174,49 @@ export default function SignupScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f4f7ff",
+    backgroundColor: "#07111f",
   },
   container: {
     flex: 1,
     justifyContent: "center",
     padding: 24,
   },
-  logoContainer: {
-    alignItems: "center",
-    marginBottom: 24,
+  heroSection: {
+    marginBottom: 18,
   },
-  logo: {
-    width: 640,
-    height: 240,
+  heroTitle: {
+    color: "#fff",
+    fontSize: 30,
+    fontWeight: "800",
+    marginBottom: 8,
+  },
+  heroSubtitle: {
+    color: "#cbd5e1",
+    fontSize: 15,
+    lineHeight: 22,
   },
   card: {
     backgroundColor: "#fff",
     borderRadius: 24,
     padding: 24,
-    shadowColor: "#5b6bff",
-    shadowOpacity: 0.12,
-    shadowRadius: 20,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 4,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.2,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 14 },
+    elevation: 6,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#132238",
-    marginBottom: 8,
+  cardLabel: {
+    color: "#2563eb",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
+    marginBottom: 6,
   },
   subtitle: {
     fontSize: 14,
-    color: "#6b7280",
-    marginBottom: 24,
+    color: "#64748b",
+    marginBottom: 18,
   },
   errorBox: {
     backgroundColor: "#fef2f2",
@@ -216,16 +243,23 @@ const styles = StyleSheet.create({
     color: "#132238",
   },
   primaryButton: {
-    backgroundColor: "#5b6bff",
-    borderRadius: 14,
+    backgroundColor: "#2563eb",
+    borderRadius: 16,
     paddingVertical: 14,
     alignItems: "center",
     marginTop: 8,
   },
+  primaryButtonPressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.99 }],
+  },
+  primaryButtonDisabled: {
+    opacity: 0.7,
+  },
   primaryButtonText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   backIconButton: {
     alignSelf: "center",

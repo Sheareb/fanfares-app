@@ -250,8 +250,33 @@ export default function BookTripScreen() {
     loadTrip();
   }, [tripId]);
 
+  useEffect(() => {
+    if (!trip) {
+      return;
+    }
+
+    setTravellers((current) => {
+      if (current.length > 0) {
+        return current;
+      }
+
+      const firstTraveller = createTravellerDraft();
+      if (trip.pickup_points.length === 1) {
+        firstTraveller.pickupPointId = trip.pickup_points[0].pickuppoint_id;
+      }
+
+      return [firstTraveller];
+    });
+  }, [trip]);
+
   const addTraveller = () => {
-    setTravellers((current) => [...current, createTravellerDraft()]);
+    setTravellers((current) => {
+      const nextTraveller = createTravellerDraft();
+      if (current.length === 0 && trip?.pickup_points.length === 1) {
+        nextTraveller.pickupPointId = trip.pickup_points[0].pickuppoint_id;
+      }
+      return [...current, nextTraveller];
+    });
   };
 
   const updateTraveller = (id: string, updates: Partial<TravellerDraft>) => {
@@ -301,15 +326,20 @@ export default function BookTripScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.headerCard}>
+          <View style={styles.stepPill}>
+            <Text style={styles.stepPillText}>Step 1 of 2</Text>
+          </View>
+          <Text style={styles.title}>Book your seat</Text>
+          <Text style={styles.subtitle}>
+            Review the trip details, add each traveller, and choose a pickup
+            point that works best.
+          </Text>
+        </View>
+
         <Pressable style={styles.backIconButton} onPress={() => router.back()}>
           <Text style={styles.backIconText}>←</Text>
         </Pressable>
-
-        <Text style={styles.title}>Book your seat</Text>
-        <Text style={styles.subtitle}>
-          Review the trip details, add each traveller, and choose a pickup
-          point.
-        </Text>
 
         {loading ? (
           <View style={styles.stateCard}>
@@ -477,10 +507,14 @@ export default function BookTripScreen() {
             <Pressable style={styles.addIconButton} onPress={addTraveller}>
               <Text style={styles.addIconText}>＋</Text>
             </Pressable>
+            <Text style={styles.helperText}>
+              Add another passenger whenever you need to book for more than one
+              traveller.
+            </Text>
 
             {hasReadyPassenger ? (
               <Pressable style={styles.summaryButton} onPress={goToSummary}>
-                <Text style={styles.summaryButtonText}>View summary</Text>
+                <Text style={styles.summaryButtonText}>Continue to review</Text>
               </Pressable>
             ) : null}
           </>
@@ -493,11 +527,37 @@ export default function BookTripScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f5f7fb",
+    backgroundColor: "#07111f",
   },
   container: {
     padding: 24,
     paddingBottom: 36,
+  },
+  headerCard: {
+    backgroundColor: "#fff",
+    borderRadius: 24,
+    padding: 18,
+    marginBottom: 12,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.12,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4,
+  },
+  stepPill: {
+    alignSelf: "flex-start",
+    backgroundColor: "#dbeafe",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 10,
+  },
+  stepPillText: {
+    color: "#1d4ed8",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
   },
   backIconButton: {
     alignSelf: "flex-start",
@@ -521,22 +581,23 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: "800",
-    color: "#1f2a44",
-    marginBottom: 8,
+    color: "#0f172a",
+    marginBottom: 6,
   },
   subtitle: {
     fontSize: 15,
     color: "#475569",
-    marginBottom: 18,
+    marginBottom: 4,
+    lineHeight: 20,
   },
   stateCard: {
     backgroundColor: "#fff",
     borderRadius: 24,
     padding: 20,
     marginBottom: 18,
-    shadowColor: "#1f2a44",
+    shadowColor: "#0f172a",
     shadowOpacity: 0.08,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
@@ -562,7 +623,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     borderWidth: 1,
     borderColor: "#e2e8f0",
-    shadowColor: "#1f2a44",
+    shadowColor: "#0f172a",
     shadowOpacity: 0.06,
     shadowRadius: 18,
     shadowOffset: { width: 0, height: 8 },
@@ -579,7 +640,7 @@ const styles = StyleSheet.create({
   tripTitle: {
     fontSize: 20,
     fontWeight: "800",
-    color: "#1f2a44",
+    color: "#0f172a",
     marginBottom: 6,
   },
   tripMeta: {
@@ -589,7 +650,7 @@ const styles = StyleSheet.create({
   },
   tripPrice: {
     fontSize: 15,
-    color: "#1f2a44",
+    color: "#0f172a",
     fontWeight: "700",
     marginTop: 6,
   },
@@ -625,6 +686,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 24,
     fontWeight: "700",
+  },
+  helperText: {
+    color: "#64748b",
+    fontSize: 13,
+    textAlign: "center",
+    marginBottom: 12,
   },
   passengerCard: {
     backgroundColor: "#fff",

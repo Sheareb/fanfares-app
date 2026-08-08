@@ -167,19 +167,36 @@ export default function BookingSummaryScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.headerCard}>
+          <View style={styles.stepPill}>
+            <Text style={styles.stepPillText}>Step 2 of 2</Text>
+          </View>
+          <Text style={styles.title}>Booking summary</Text>
+          <Text style={styles.subtitle}>
+            Confirm the trip, passengers, and pickup points before you book.
+          </Text>
+          <View style={styles.summaryStrip}>
+            <View style={styles.summaryPill}>
+              <Text style={styles.summaryPillLabel}>Trip</Text>
+              <Text style={styles.summaryPillValue}>
+                {trip?.description || "Selected"}
+              </Text>
+            </View>
+            <View style={styles.summaryPill}>
+              <Text style={styles.summaryPillLabel}>Travellers</Text>
+              <Text style={styles.summaryPillValue}>{travellers.length}</Text>
+            </View>
+          </View>
+        </View>
+
         <View style={styles.headerRow}>
           <Pressable
             style={[styles.backIconButton, styles.leftTopControl]}
-            onPress={() => router.replace("/customer_dashboard")}
+            onPress={() => router.replace("/(customer-tabs)/home")}
           >
             <Text style={styles.backIconText}>←</Text>
           </Pressable>
-
-          <Text style={styles.title}>Booking summary</Text>
         </View>
-        <Text style={styles.subtitle}>
-          Confirm the trip details and passengers before booking.
-        </Text>
 
         {trip ? (
           <View style={styles.tripCard}>
@@ -224,7 +241,25 @@ export default function BookingSummaryScreen() {
           )}
         </View>
 
-        {message ? <Text style={styles.successText}>{message}</Text> : null}
+        {message ? (
+          <View style={styles.successCard}>
+            <Text style={styles.successText}>{message}</Text>
+            <View style={styles.actionsRow}>
+              <Pressable
+                style={[styles.secondaryButton, styles.actionsButton]}
+                onPress={() => router.replace("/(customer-tabs)/home")}
+              >
+                <Text style={styles.secondaryButtonText}>View bookings</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.primaryButton, styles.actionsButton]}
+                onPress={() => router.replace("/(customer-tabs)/discover")}
+              >
+                <Text style={styles.primaryButtonText}>Book another trip</Text>
+              </Pressable>
+            </View>
+          </View>
+        ) : null}
         {errorMessage ? (
           <Text style={styles.errorText}>{errorMessage}</Text>
         ) : null}
@@ -250,11 +285,37 @@ export default function BookingSummaryScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f5f7fb",
+    backgroundColor: "#07111f",
   },
   container: {
     padding: 24,
     paddingBottom: 36,
+  },
+  headerCard: {
+    backgroundColor: "#fff",
+    borderRadius: 24,
+    padding: 18,
+    marginBottom: 12,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.12,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4,
+  },
+  stepPill: {
+    alignSelf: "flex-start",
+    backgroundColor: "#dbeafe",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 10,
+  },
+  stepPillText: {
+    color: "#1d4ed8",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
   },
   headerRow: {
     position: "relative",
@@ -288,36 +349,67 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: "800",
-    color: "#1f2a44",
+    color: "#0f172a",
   },
   subtitle: {
     fontSize: 15,
     color: "#475569",
-    textAlign: "center",
-    marginBottom: 18,
+    marginTop: 4,
+    lineHeight: 20,
+  },
+  summaryStrip: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 12,
+    flexWrap: "wrap",
+  },
+  summaryPill: {
+    flex: 1,
+    minWidth: 120,
+    backgroundColor: "#eff6ff",
+    borderRadius: 14,
+    padding: 10,
+  },
+  summaryPillLabel: {
+    color: "#2563eb",
+    fontSize: 11,
+    fontWeight: "800",
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+  },
+  summaryPillValue: {
+    color: "#0f172a",
+    fontSize: 14,
+    fontWeight: "700",
+    marginTop: 2,
   },
   tripCard: {
     backgroundColor: "#fff",
-    borderRadius: 22,
+    borderRadius: 20,
     padding: 18,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
-    shadowColor: "#1f2a44",
+    borderColor: "#e5eaf3",
+    shadowColor: "#0f172a",
     shadowOpacity: 0.06,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 10 },
     elevation: 3,
   },
   sectionCard: {
     backgroundColor: "#fff",
-    borderRadius: 22,
+    borderRadius: 20,
     padding: 18,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: "#e5eaf3",
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 3,
   },
   cardLabel: {
     color: "#2563eb",
@@ -330,7 +422,7 @@ const styles = StyleSheet.create({
   tripTitle: {
     fontSize: 20,
     fontWeight: "800",
-    color: "#1f2a44",
+    color: "#0f172a",
     marginBottom: 6,
   },
   tripMeta: {
@@ -340,7 +432,7 @@ const styles = StyleSheet.create({
   },
   tripPrice: {
     fontSize: 15,
-    color: "#1f2a44",
+    color: "#0f172a",
     fontWeight: "700",
     marginTop: 6,
   },
@@ -352,7 +444,7 @@ const styles = StyleSheet.create({
   travellerName: {
     fontSize: 15,
     fontWeight: "700",
-    color: "#1f2a44",
+    color: "#0f172a",
   },
   travellerPickup: {
     fontSize: 13,
@@ -363,16 +455,28 @@ const styles = StyleSheet.create({
     color: "#64748b",
     fontSize: 14,
   },
-  successText: {
-    color: "#0f766e",
-    fontWeight: "700",
-    textAlign: "center",
-    marginBottom: 8,
+  successCard: {
+    backgroundColor: "#ecfdf3",
+    borderRadius: 20,
+    padding: 18,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: "#86efac",
   },
-  errorText: {
-    color: "#b91c1c",
-    fontWeight: "600",
-    marginBottom: 8,
+  successText: {
+    color: "#166534",
+    fontSize: 15,
+    fontWeight: "700",
+    marginBottom: 12,
+  },
+  actionsRow: {
+    flexDirection: "row",
+    gap: 10,
+    flexWrap: "wrap",
+  },
+  actionsButton: {
+    flexGrow: 1,
+    minWidth: 140,
   },
   primaryButton: {
     marginTop: 6,
@@ -385,5 +489,24 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 15,
     fontWeight: "700",
+  },
+  secondaryButton: {
+    backgroundColor: "#fff",
+    borderColor: "#cbd5e1",
+    borderWidth: 1,
+    borderRadius: 14,
+    paddingVertical: 14,
+    alignItems: "center",
+    marginTop: 8,
+  },
+  secondaryButtonText: {
+    color: "#0f172a",
+    fontSize: 15,
+    fontWeight: "700",
+  },
+  errorText: {
+    color: "#b91c1c",
+    fontWeight: "600",
+    marginTop: 8,
   },
 });

@@ -36,7 +36,10 @@ export default function DashboardSettingsMenu({
               onChangePassword();
             }}
           >
-            <Text style={styles.menuItemText}>Change password</Text>
+            <View style={styles.menuItemContent}>
+              <Text style={styles.menuItemIcon}>🔐</Text>
+              <Text style={styles.menuItemText}>Change password</Text>
+            </View>
           </Pressable>
 
           <Pressable
@@ -46,7 +49,10 @@ export default function DashboardSettingsMenu({
               onEditProfile();
             }}
           >
-            <Text style={styles.menuItemText}>Edit profile</Text>
+            <View style={styles.menuItemContent}>
+              <Text style={styles.menuItemIcon}>✎</Text>
+              <Text style={styles.menuItemText}>Edit profile</Text>
+            </View>
           </Pressable>
 
           <Pressable
@@ -56,7 +62,10 @@ export default function DashboardSettingsMenu({
               onSignOut();
             }}
           >
-            <Text style={styles.menuItemText}>Sign out</Text>
+            <View style={styles.menuItemContent}>
+              <Text style={styles.menuItemIcon}>↩</Text>
+              <Text style={styles.menuItemText}>Sign out</Text>
+            </View>
           </Pressable>
         </View>
       ) : null}
@@ -117,8 +126,19 @@ const styles = StyleSheet.create({
     elevation: 1000,
   },
   menuItem: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  menuItemContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 12,
+  },
+  menuItemIcon: {
+    fontSize: 16,
   },
   menuItemText: {
     color: "#1f2a44",

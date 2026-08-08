@@ -224,16 +224,20 @@ export default function RunTripScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>{tripDescription ?? "Trip"} — Run Trip</Text>
-        <Text style={styles.subtitle}>
-          {bookings.length} passenger{bookings.length !== 1 ? "s" : ""}
-          {"\n"}
-          <Text style={styles.debugText}>trip_id: {tripId ?? "(none)"}</Text>
-        </Text>
+        <View style={styles.headerCard}>
+          <View style={styles.stepPill}>
+            <Text style={styles.stepPillText}>Boarding</Text>
+          </View>
+          <Text style={styles.title}>{tripDescription ?? "Trip"}</Text>
+          <Text style={styles.subtitle}>
+            {bookings.length} passenger{bookings.length !== 1 ? "s" : ""} ready
+            to check in.
+          </Text>
+        </View>
 
         {loading ? (
           <View style={styles.stateCard}>
-            <ActivityIndicator size="small" color="#5b6bff" />
+            <ActivityIndicator size="small" color="#2563eb" />
             <Text style={styles.stateText}>Loading bookings...</Text>
           </View>
         ) : errorMessage ? (
@@ -263,7 +267,7 @@ export default function RunTripScreen() {
                   <Text style={styles.passengerName}>
                     {formatNameSurnameFirst(booking.customer_name || "")}
                     {isBoarded ? (
-                      <Text style={styles.passengerName}> (Boarded)</Text>
+                      <Text style={styles.passengerName}> • Boarded</Text>
                     ) : null}
                   </Text>
                   <Text style={styles.pickupPointText}>
@@ -280,7 +284,7 @@ export default function RunTripScreen() {
                       value={isPaid}
                       onValueChange={(val) => updateBookingStatus(booking, val)}
                       disabled={isStatusSaving || isBoardedSaving}
-                      trackColor={{ false: "#dfe7ff", true: "#5b6bff" }}
+                      trackColor={{ false: "#dfe7ff", true: "#2563eb" }}
                       thumbColor="#fff"
                     />
                   </View>
@@ -301,45 +305,74 @@ export default function RunTripScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f5f7fb",
+    backgroundColor: "#07111f",
   },
   container: {
     paddingTop: 24,
     paddingBottom: 36,
     padding: 24,
   },
+  headerCard: {
+    backgroundColor: "#fff",
+    borderRadius: 24,
+    padding: 18,
+    marginBottom: 16,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.12,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4,
+  },
+  stepPill: {
+    alignSelf: "flex-start",
+    backgroundColor: "#dbeafe",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 10,
+  },
+  stepPillText: {
+    color: "#1d4ed8",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
+  },
   title: {
     fontSize: 26,
     fontWeight: "800",
-    color: "#1f2a44",
+    color: "#0f172a",
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: "#6b7280",
-    marginBottom: 24,
-  },
-  debugText: {
-    fontSize: 11,
-    color: "#9ca3af",
-    fontFamily: "monospace",
+    color: "#475569",
+    marginBottom: 2,
+    lineHeight: 20,
   },
   stateCard: {
     backgroundColor: "#fff",
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 20,
     alignItems: "center",
     marginBottom: 16,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3,
   },
   stateText: {
-    color: "#6b7280",
+    color: "#475569",
     marginTop: 8,
+    fontSize: 14,
+    fontWeight: "600",
   },
   errorCard: {
     backgroundColor: "#fef2f2",
     borderColor: "#fecaca",
     borderWidth: 1,
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 16,
     marginBottom: 16,
   },
@@ -350,21 +383,21 @@ const styles = StyleSheet.create({
   },
   row: {
     backgroundColor: "#fff",
-    borderRadius: 16,
+    borderRadius: 18,
     padding: 16,
     marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
-    shadowColor: "#5b6bff",
+    shadowColor: "#0f172a",
     shadowOpacity: 0.07,
     shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 6 },
     elevation: 2,
   },
   rowBoarded: {
     borderWidth: 1,
-    borderColor: "#15803d",
-    backgroundColor: "#dcfce7",
+    borderColor: "#86efac",
+    backgroundColor: "#f0fdf4",
   },
   passengerMeta: {
     flex: 1,
@@ -373,7 +406,7 @@ const styles = StyleSheet.create({
   passengerName: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#1f2a44",
+    color: "#0f172a",
   },
   pickupPointText: {
     marginTop: 3,
@@ -390,7 +423,7 @@ const styles = StyleSheet.create({
   },
   switchLabel: {
     fontSize: 11,
-    color: "#6b7280",
+    color: "#64748b",
     fontWeight: "600",
   },
   backIconButton: {

@@ -133,7 +133,7 @@ async function getWhiteLogoSrc() {
 
   try {
     const base64 = await FileSystem.readAsStringAsync(asset.localUri, {
-      encoding: FileSystem.EncodingType.Base64,
+      encoding: "base64" as any,
     });
     return `data:image/png;base64,${base64}`;
   } catch {
@@ -786,7 +786,10 @@ async function generateWebPdfPreview(params: {
   });
 
   const bytes = await pdfDoc.save();
-  const blob = new Blob([bytes], { type: "application/pdf" });
+  const safeBytes = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+  const blob = new Blob([safeBytes as unknown as ArrayBuffer], {
+    type: "application/pdf",
+  });
   return URL.createObjectURL(blob);
 }
 
@@ -928,8 +931,13 @@ export default function TripReportsScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.title}>Reports</Text>
-        <Text style={styles.subtitle}>{normalizedTripDescription}</Text>
+        <View style={styles.heroCard}>
+          <View style={styles.heroBadge}>
+            <Text style={styles.heroBadgeText}>Reports</Text>
+          </View>
+          <Text style={styles.title}>Trip summary</Text>
+          <Text style={styles.subtitle}>{normalizedTripDescription}</Text>
+        </View>
 
         <Pressable
           style={({ pressed }) => [
@@ -940,10 +948,15 @@ export default function TripReportsScreen() {
           onPress={generateTripSummary}
           disabled={running}
         >
-          <Text style={styles.cardIcon}>📄</Text>
-          <Text style={styles.cardTitle}>Trip Summary</Text>
+          <View style={styles.cardIconWrap}>
+            <Text style={styles.cardIcon}>📄</Text>
+          </View>
+          <Text style={styles.cardTitle}>Generate report</Text>
+          <Text style={styles.cardDescription}>
+            Export a polished passenger summary for this trip.
+          </Text>
 
-          {running ? <ActivityIndicator color="#ea580c" size="small" /> : null}
+          {running ? <ActivityIndicator color="#2563eb" size="small" /> : null}
 
           {message ? <Text style={styles.successText}>{message}</Text> : null}
           {errorMessage ? (
@@ -973,50 +986,90 @@ export default function TripReportsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f5f7fb",
+    backgroundColor: "#07111f",
   },
   container: {
     flex: 1,
     padding: 24,
   },
+  heroCard: {
+    backgroundColor: "#fff",
+    borderRadius: 24,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.12,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4,
+  },
+  heroBadge: {
+    alignSelf: "flex-start",
+    backgroundColor: "#dbeafe",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 10,
+  },
+  heroBadgeText: {
+    color: "#1d4ed8",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
+  },
   title: {
     fontSize: 28,
     fontWeight: "800",
-    color: "#1f2a44",
+    color: "#0f172a",
     marginBottom: 6,
   },
   subtitle: {
     fontSize: 14,
-    color: "#6b7280",
-    marginBottom: 18,
+    color: "#475569",
+    marginBottom: 2,
+    lineHeight: 20,
   },
   card: {
     backgroundColor: "#fff",
-    borderRadius: 16,
+    borderRadius: 22,
     padding: 24,
     alignItems: "center",
-    shadowColor: "#1f2937",
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.1,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
     elevation: 3,
   },
   cardPressed: {
-    opacity: 0.9,
-    transform: [{ scale: 0.995 }],
+    opacity: 0.92,
   },
   cardDisabled: {
     opacity: 0.7,
   },
+  cardIconWrap: {
+    width: 56,
+    height: 56,
+    borderRadius: 18,
+    backgroundColor: "#eff6ff",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 12,
+  },
+  cardIcon: {
+    fontSize: 28,
+  },
   cardTitle: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#111827",
-    marginBottom: 10,
+    color: "#0f172a",
+    marginBottom: 6,
   },
-  cardIcon: {
-    fontSize: 34,
-    marginBottom: 10,
+  cardDescription: {
+    fontSize: 14,
+    color: "#64748b",
+    textAlign: "center",
+    lineHeight: 20,
   },
   successText: {
     marginTop: 12,

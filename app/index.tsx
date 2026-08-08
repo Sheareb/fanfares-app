@@ -31,7 +31,7 @@ export default function LoginScreen() {
       __DEV__ && email.trim() === "testName" && password === "testPass";
 
     if (isDevelopmentBypass) {
-      router.replace("/customer_dashboard");
+      router.replace("/(customer-tabs)/home");
       return;
     }
 
@@ -86,11 +86,11 @@ export default function LoginScreen() {
       }
 
       if (getIsOrganiser(profileData)) {
-        router.replace("/organiser-dashboard");
+        router.replace("/(organiser-tabs)/overview");
         return;
       }
 
-      router.replace("/customer_dashboard");
+      router.replace("/(customer-tabs)/home");
     } catch (error) {
       console.error("Login failed", error);
       const message =
@@ -111,17 +111,30 @@ export default function LoginScreen() {
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
         >
-          <View style={styles.logoContainer}>
-            <Image
-              source={require("../assets/images/fanfares_logo_white.png")}
-              style={styles.logo}
-              resizeMode="contain"
-            />
+          <View style={styles.heroSection}>
+            <View style={styles.brandPill}>
+              <Text style={styles.brandPillText}>
+                Fanfares • Travel made simple
+              </Text>
+            </View>
+            <Text style={styles.heroTitle}>Welcome back</Text>
+            <Text style={styles.heroSubtitle}>
+              Your next journey should feel effortless from the first tap.
+            </Text>
+            <View style={styles.heroRow}>
+              <View style={styles.heroChip}>
+                <Text style={styles.heroChipText}>Fast booking</Text>
+              </View>
+              <View style={styles.heroChip}>
+                <Text style={styles.heroChipText}>Real-time updates</Text>
+              </View>
+            </View>
           </View>
+
           <View style={styles.card}>
-            <Text style={styles.title}>Welcome back</Text>
+            <Text style={styles.cardLabel}>Sign in</Text>
             <Text style={styles.subtitle}>
-              Sign in to continue to your account.
+              Access your trips, bookings, and organiser tools in one place.
             </Text>
 
             {errorMessage ? (
@@ -143,6 +156,12 @@ export default function LoginScreen() {
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
+              autoComplete="email"
+              textContentType="emailAddress"
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                // focus handled by next field in the form
+              }}
             />
 
             <TextInput
@@ -156,25 +175,33 @@ export default function LoginScreen() {
                 }
               }}
               secureTextEntry
+              autoComplete="current-password"
+              textContentType="password"
+              returnKeyType="done"
+              onSubmitEditing={handleLogin}
             />
 
             <Pressable
-              style={styles.primaryButton}
+              style={({ pressed }) => [
+                styles.primaryButton,
+                pressed && styles.primaryButtonPressed,
+                loading && styles.primaryButtonDisabled,
+              ]}
               onPress={handleLogin}
               disabled={loading}
             >
               <Text style={styles.primaryButtonText}>
-                {loading ? "Signing in..." : "Log in"}
+                {loading ? "Signing in..." : "Continue"}
               </Text>
             </Pressable>
 
             <View style={styles.rowLinks}>
-              <Link href="/signup" style={styles.linkText}>
-                Create account
-              </Link>
-              <Link href="/reset-password" style={styles.linkText}>
-                Forgot password?
-              </Link>
+              <Pressable onPress={() => router.push("/signup")}>
+                <Text style={styles.linkText}>Create account</Text>
+              </Pressable>
+              <Pressable onPress={() => router.push("/reset-password")}>
+                <Text style={styles.linkText}>Forgot password?</Text>
+              </Pressable>
             </View>
           </View>
         </ScrollView>
@@ -186,7 +213,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f4f7ff",
+    backgroundColor: "#07111f",
   },
   container: {
     flex: 1,
@@ -196,34 +223,74 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 24,
   },
-  logoContainer: {
-    alignItems: "center",
-    marginBottom: 24,
+  heroSection: {
+    marginBottom: 18,
   },
-  logo: {
-    width: 640,
-    height: 240,
+  brandPill: {
+    alignSelf: "flex-start",
+    backgroundColor: "rgba(255,255,255,0.16)",
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    marginBottom: 12,
+  },
+  brandPillText: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0.4,
+  },
+  heroTitle: {
+    color: "#fff",
+    fontSize: 30,
+    fontWeight: "800",
+    marginBottom: 6,
+  },
+  heroSubtitle: {
+    color: "#cbd5e1",
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 12,
+  },
+  heroRow: {
+    flexDirection: "row",
+    gap: 8,
+    flexWrap: "wrap",
+  },
+  heroChip: {
+    backgroundColor: "rgba(255,255,255,0.14)",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+  },
+  heroChipText: {
+    color: "#f8fafc",
+    fontSize: 12,
+    fontWeight: "700",
   },
   card: {
     backgroundColor: "#fff",
     borderRadius: 24,
     padding: 24,
-    shadowColor: "#5b6bff",
-    shadowOpacity: 0.12,
-    shadowRadius: 20,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 4,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.2,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 14 },
+    elevation: 6,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#132238",
-    marginBottom: 8,
+  cardLabel: {
+    color: "#2563eb",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
+    marginBottom: 6,
   },
   subtitle: {
     fontSize: 14,
-    color: "#6b7280",
-    marginBottom: 24,
+    color: "#475569",
+    marginBottom: 18,
+    lineHeight: 20,
   },
   errorBox: {
     backgroundColor: "#fef2f2",
@@ -250,16 +317,23 @@ const styles = StyleSheet.create({
     color: "#132238",
   },
   primaryButton: {
-    backgroundColor: "#5b6bff",
-    borderRadius: 14,
+    backgroundColor: "#2563eb",
+    borderRadius: 16,
     paddingVertical: 14,
     alignItems: "center",
     marginTop: 8,
   },
+  primaryButtonPressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.99 }],
+  },
+  primaryButtonDisabled: {
+    opacity: 0.7,
+  },
   primaryButtonText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   rowLinks: {
     flexDirection: "row",
@@ -267,7 +341,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   linkText: {
-    color: "#5b6bff",
-    fontWeight: "600",
+    color: "#2563eb",
+    fontWeight: "700",
   },
 });

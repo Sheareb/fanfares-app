@@ -158,17 +158,20 @@ export default function TripBookingsScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>{tripDescription ?? "Trip"} — Bookings</Text>
-        <Text style={styles.subtitle}>
-          {bookings.length} passenger
-          {bookings.length !== 1 ? "s" : ""}
-          {"\n"}
-          <Text style={styles.debugText}>trip_id: {tripId ?? "(none)"}</Text>
-        </Text>
+        <View style={styles.headerCard}>
+          <View style={styles.stepPill}>
+            <Text style={styles.stepPillText}>Passenger list</Text>
+          </View>
+          <Text style={styles.title}>{tripDescription ?? "Trip"}</Text>
+          <Text style={styles.subtitle}>
+            {bookings.length} passenger{bookings.length !== 1 ? "s" : ""} ready
+            to review.
+          </Text>
+        </View>
 
         {loading ? (
           <View style={styles.stateCard}>
-            <ActivityIndicator size="small" color="#5b6bff" />
+            <ActivityIndicator size="small" color="#2563eb" />
             <Text style={styles.stateText}>Loading bookings...</Text>
           </View>
         ) : errorMessage ? (
@@ -200,35 +203,62 @@ export default function TripBookingsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f5f7fb",
+    backgroundColor: "#07111f",
   },
   container: {
     paddingTop: 24,
     paddingBottom: 36,
     padding: 24,
   },
+  headerCard: {
+    backgroundColor: "#fff",
+    borderRadius: 24,
+    padding: 18,
+    marginBottom: 16,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.12,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4,
+  },
+  stepPill: {
+    alignSelf: "flex-start",
+    backgroundColor: "#dbeafe",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 10,
+  },
+  stepPillText: {
+    color: "#1d4ed8",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
+  },
   title: {
     fontSize: 26,
     fontWeight: "800",
-    color: "#1f2a44",
+    color: "#0f172a",
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: "#6b7280",
-    marginBottom: 14,
-  },
-  debugText: {
-    fontSize: 11,
-    color: "#9ca3af",
-    fontFamily: "monospace",
+    color: "#475569",
+    marginBottom: 2,
+    lineHeight: 20,
   },
   stateCard: {
     backgroundColor: "#fff",
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 20,
     alignItems: "center",
     marginBottom: 16,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3,
   },
   stateText: {
     marginTop: 10,
@@ -238,32 +268,27 @@ const styles = StyleSheet.create({
   },
   errorCard: {
     backgroundColor: "#fff1f2",
-    borderRadius: 16,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: "#fecdd3",
     marginBottom: 16,
+    padding: 16,
   },
   errorText: {
     color: "#b91c1c",
     fontSize: 13,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: "#1f2937",
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 3,
+    fontWeight: "600",
   },
   sectionCard: {
     backgroundColor: "#fff",
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 16,
     marginBottom: 10,
-    shadowColor: "#1f2937",
-    shadowOpacity: 0.06,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 2,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -274,15 +299,15 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: "800",
-    color: "#1f2a44",
+    color: "#0f172a",
   },
   sectionCount: {
     minWidth: 28,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 999,
-    backgroundColor: "#eef2ff",
-    color: "#4338ca",
+    backgroundColor: "#eff6ff",
+    color: "#2563eb",
     fontSize: 12,
     fontWeight: "700",
     textAlign: "center",
@@ -301,7 +326,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: "700",
-    color: "#1f2a44",
+    color: "#0f172a",
   },
   paidColumn: {
     alignItems: "center",
@@ -309,7 +334,7 @@ const styles = StyleSheet.create({
   },
   paidLabel: {
     fontSize: 11,
-    color: "#6b7280",
+    color: "#64748b",
     fontWeight: "600",
   },
   backIconButton: {
