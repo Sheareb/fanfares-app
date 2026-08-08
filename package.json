@@ -4,9 +4,9 @@
   "private": true,
   "main": "expo-router/entry",
   "scripts": {
-    "start": "node scripts/start-expo.js start",
-    "android": "node scripts/start-expo.js start --android",
-    "ios": "node scripts/start-expo.js start --ios",
+    "start": "CI=1 node scripts/start-expo.js start",
+    "android": "CI=1 node scripts/start-expo.js start --android",
+    "ios": "CI=1 node scripts/start-expo.js start --ios",
     "create-demo-user": "node scripts/create-demo-user.js",
     "deploy": "zsh scripts/deploy.sh"
   },

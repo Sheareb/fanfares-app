@@ -560,7 +560,7 @@ export default function AddTripScreen() {
       setSeatCount("");
       setSeatPrice("");
       setPickupPoints([createPickupPoint()]);
-      router.replace("/organiser-dashboard");
+      router.replace("/(organiser-tabs)/overview");
     } catch (error) {
       const message =
         error instanceof Error
@@ -586,16 +586,22 @@ export default function AddTripScreen() {
           <View style={styles.card}>
             <View style={styles.topActions}>
               <Pressable
-                style={styles.addIconButton}
+                style={({ pressed }) => [
+                  styles.addIconButton,
+                  pressed && styles.addIconButtonPressed,
+                ]}
                 onPress={() => router.back()}
               >
                 <Text style={styles.addIconText}>←</Text>
               </Pressable>
             </View>
 
+            <View style={styles.heroPill}>
+              <Text style={styles.heroPillText}>Create trip</Text>
+            </View>
             <Text style={styles.title}>Add a trip</Text>
             <Text style={styles.subtitle}>
-              Share the trip details and pickup points for your travellers.
+              Share the route, schedule, and pickup points for your travellers.
             </Text>
 
             {feedback ? (
@@ -868,7 +874,10 @@ export default function AddTripScreen() {
 
             {isLastPickupPointComplete ? (
               <Pressable
-                style={styles.pickupAddButton}
+                style={({ pressed }) => [
+                  styles.pickupAddButton,
+                  pressed && styles.pickupAddButtonPressed,
+                ]}
                 onPress={addPickupPoint}
               >
                 <Text style={styles.pickupAddIcon}>＋</Text>
@@ -877,8 +886,9 @@ export default function AddTripScreen() {
 
             {isDeparturePointComplete ? (
               <Pressable
-                style={[
+                style={({ pressed }) => [
                   styles.primaryButton,
+                  pressed && styles.primaryButtonPressed,
                   loading && styles.primaryButtonDisabled,
                 ]}
                 onPress={handleSave}
@@ -901,7 +911,7 @@ export default function AddTripScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f4f7ff",
+    backgroundColor: "#07111f",
   },
   container: {
     flex: 1,
@@ -914,11 +924,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 24,
     padding: 24,
-    shadowColor: "#5b6bff",
+    shadowColor: "#0f172a",
     shadowOpacity: 0.12,
     shadowRadius: 20,
     shadowOffset: { width: 0, height: 10 },
     elevation: 4,
+  },
+  heroPill: {
+    alignSelf: "flex-start",
+    backgroundColor: "#dbeafe",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 10,
+  },
+  heroPillText: {
+    color: "#1d4ed8",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
   },
   topActions: {
     flexDirection: "row",
@@ -937,6 +962,10 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 6 },
     elevation: 3,
+  },
+  addIconButtonPressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.98 }],
   },
   addIconText: {
     color: "#fff",
@@ -1140,6 +1169,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 6 },
     elevation: 3,
   },
+  pickupAddButtonPressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.98 }],
+  },
   pickupAddIcon: {
     color: "#fff",
     fontSize: 24,
@@ -1159,6 +1192,10 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: "center",
     marginTop: 12,
+  },
+  primaryButtonPressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.99 }],
   },
   primaryButtonDisabled: {
     opacity: 0.6,

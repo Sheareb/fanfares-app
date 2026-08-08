@@ -15,7 +15,51 @@ export default function TripActionsScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.title}>{normalizedTripDescription}</Text>
+        <View style={styles.headerRow}>
+          <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Text style={styles.backButtonText}>←</Text>
+          </Pressable>
+          <Text style={styles.headerTitle}>Trip operations</Text>
+          <View style={styles.headerSpacer} />
+        </View>
+
+        <View style={styles.heroCard}>
+          <View style={styles.heroBadge}>
+            <Text style={styles.heroBadgeText}>Focused controls</Text>
+          </View>
+          <Text style={styles.title}>{normalizedTripDescription}</Text>
+          <Text style={styles.subtitle}>
+            Run the journey with clarity, speed, and fewer taps.
+          </Text>
+        </View>
+
+        <Pressable
+          style={({ pressed }) => [
+            styles.optionCard,
+            pressed && styles.cardPressed,
+          ]}
+          onPress={() =>
+            router.push({
+              pathname: "/trip-details",
+              params: {
+                tripId: normalizedTripId,
+                tripDescription: normalizedTripDescription,
+              },
+            })
+          }
+        >
+          <View style={styles.optionContent}>
+            <View style={styles.optionIconWrap}>
+              <Text style={styles.optionIcon}>🧭</Text>
+            </View>
+            <View style={styles.optionTextWrap}>
+              <Text style={styles.optionTitle}>Trip overview</Text>
+              <Text style={styles.optionDescription}>
+                Review trip details, passenger status, and next actions.
+              </Text>
+            </View>
+          </View>
+        </Pressable>
 
         <Pressable
           style={({ pressed }) => [
@@ -32,11 +76,17 @@ export default function TripActionsScreen() {
             })
           }
         >
-          <Text style={styles.optionIcon}>💷</Text>
-          <Text style={styles.optionTitle}>Payments</Text>
-          <Text style={styles.optionDescription}>
-            Review all passengers and update paid or unpaid status.
-          </Text>
+          <View style={styles.optionContent}>
+            <View style={styles.optionIconWrap}>
+              <Text style={styles.optionIcon}>💷</Text>
+            </View>
+            <View style={styles.optionTextWrap}>
+              <Text style={styles.optionTitle}>Payments</Text>
+              <Text style={styles.optionDescription}>
+                Review every passenger and update payment status in one place.
+              </Text>
+            </View>
+          </View>
         </Pressable>
 
         <Pressable
@@ -54,11 +104,17 @@ export default function TripActionsScreen() {
             })
           }
         >
-          <Text style={styles.optionIcon}>🚌</Text>
-          <Text style={styles.optionTitle}>Board Bus</Text>
-          <Text style={styles.optionDescription}>
-            Mark travellers as boarded by tapping their rows.
-          </Text>
+          <View style={styles.optionContent}>
+            <View style={styles.optionIconWrap}>
+              <Text style={styles.optionIcon}>🚌</Text>
+            </View>
+            <View style={styles.optionTextWrap}>
+              <Text style={styles.optionTitle}>Boarding</Text>
+              <Text style={styles.optionDescription}>
+                Tap through the list to mark travellers as they board.
+              </Text>
+            </View>
+          </View>
         </Pressable>
 
         <Pressable
@@ -76,18 +132,17 @@ export default function TripActionsScreen() {
             })
           }
         >
-          <Text style={styles.optionIcon}>📄</Text>
-          <Text style={styles.optionTitle}>Reports</Text>
-          <Text style={styles.optionDescription}>
-            Generate reports for your trip
-          </Text>
-        </Pressable>
-
-        <Pressable
-          style={styles.backIconButton}
-          onPress={() => router.replace("/organiser-dashboard")}
-        >
-          <Text style={styles.backIconText}>←</Text>
+          <View style={styles.optionContent}>
+            <View style={styles.optionIconWrap}>
+              <Text style={styles.optionIcon}>📄</Text>
+            </View>
+            <View style={styles.optionTextWrap}>
+              <Text style={styles.optionTitle}>Reports</Text>
+              <Text style={styles.optionDescription}>
+                Generate trip reports and keep operations organised.
+              </Text>
+            </View>
+          </View>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -97,69 +152,119 @@ export default function TripActionsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f4f7ff",
+    backgroundColor: "#07111f",
   },
   container: {
     flex: 1,
     padding: 24,
     justifyContent: "center",
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#132238",
-    marginBottom: 32,
-    textAlign: "center",
-  },
-  optionCard: {
-    backgroundColor: "#fff",
-    borderRadius: 20,
-    padding: 24,
+  headerRow: {
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 16,
-    shadowColor: "#5b6bff",
-    shadowOpacity: 0.1,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 3,
   },
-  cardPressed: {
-    opacity: 0.7,
-  },
-  optionIcon: {
-    fontSize: 34,
-    marginBottom: 10,
-  },
-  optionTitle: {
-    color: "#132238",
-    fontSize: 18,
-    fontWeight: "700",
-    marginBottom: 6,
-  },
-  optionDescription: {
-    color: "#6b7280",
-    fontSize: 14,
-    textAlign: "center",
-  },
-  backIconButton: {
-    alignSelf: "center",
-    width: 44,
-    height: 44,
+  backButton: {
+    width: 40,
+    height: 40,
     borderRadius: 999,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#2563eb",
-    marginTop: 14,
-    shadowColor: "#2563eb",
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 3,
+    backgroundColor: "rgba(255,255,255,0.16)",
   },
-  backIconText: {
+  backButtonText: {
     color: "#fff",
+    fontSize: 20,
+    lineHeight: 20,
+  },
+  headerTitle: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "800",
+  },
+  headerSpacer: {
+    width: 40,
+  },
+  heroCard: {
+    backgroundColor: "#fff",
+    borderRadius: 24,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.14,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4,
+  },
+  heroBadge: {
+    alignSelf: "flex-start",
+    backgroundColor: "#dbeafe",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 10,
+  },
+  heroBadgeText: {
+    color: "#1d4ed8",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "800",
+    color: "#0f172a",
+    marginBottom: 8,
+  },
+  subtitle: {
+    color: "#475569",
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  optionCard: {
+    backgroundColor: "#fff",
+    borderRadius: 22,
+    padding: 18,
+    marginBottom: 14,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4,
+  },
+  cardPressed: {
+    opacity: 0.85,
+  },
+  optionContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  optionIconWrap: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: "#eff6ff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  optionIcon: {
     fontSize: 24,
-    lineHeight: 24,
+  },
+  optionTextWrap: {
+    flex: 1,
+  },
+  optionTitle: {
+    color: "#0f172a",
+    fontSize: 18,
     fontWeight: "700",
+    marginBottom: 4,
+  },
+  optionDescription: {
+    color: "#64748b",
+    fontSize: 14,
+    lineHeight: 20,
   },
 });

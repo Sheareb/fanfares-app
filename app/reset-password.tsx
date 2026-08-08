@@ -57,10 +57,17 @@ export default function ResetPasswordScreen() {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.container}
       >
+        <View style={styles.heroSection}>
+          <Text style={styles.heroTitle}>Reset password</Text>
+          <Text style={styles.heroSubtitle}>
+            We’ll send a secure link to help you get back into your account.
+          </Text>
+        </View>
+
         <View style={styles.card}>
-          <Text style={styles.title}>Reset password</Text>
+          <Text style={styles.cardLabel}>Recovery</Text>
           <Text style={styles.subtitle}>
-            Enter your email and we’ll help you get back in.
+            Enter the email tied to your account.
           </Text>
 
           <TextInput
@@ -71,10 +78,18 @@ export default function ResetPasswordScreen() {
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
+            autoComplete="email"
+            textContentType="emailAddress"
+            returnKeyType="done"
+            onSubmitEditing={handleResetPassword}
           />
 
           <Pressable
-            style={styles.primaryButton}
+            style={({ pressed }) => [
+              styles.primaryButton,
+              pressed && styles.primaryButtonPressed,
+              loading && styles.primaryButtonDisabled,
+            ]}
             onPress={handleResetPassword}
             disabled={loading}
           >
@@ -98,33 +113,49 @@ export default function ResetPasswordScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f4f7ff",
+    backgroundColor: "#07111f",
   },
   container: {
     flex: 1,
     justifyContent: "center",
     padding: 24,
   },
+  heroSection: {
+    marginBottom: 18,
+  },
+  heroTitle: {
+    color: "#fff",
+    fontSize: 30,
+    fontWeight: "800",
+    marginBottom: 8,
+  },
+  heroSubtitle: {
+    color: "#cbd5e1",
+    fontSize: 15,
+    lineHeight: 22,
+  },
   card: {
     backgroundColor: "#fff",
     borderRadius: 24,
     padding: 24,
-    shadowColor: "#5b6bff",
-    shadowOpacity: 0.12,
-    shadowRadius: 20,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 4,
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.2,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 14 },
+    elevation: 6,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#132238",
-    marginBottom: 8,
+  cardLabel: {
+    color: "#2563eb",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
+    marginBottom: 6,
   },
   subtitle: {
     fontSize: 14,
-    color: "#6b7280",
-    marginBottom: 24,
+    color: "#64748b",
+    marginBottom: 18,
   },
   input: {
     borderWidth: 1,
@@ -137,16 +168,23 @@ const styles = StyleSheet.create({
     color: "#132238",
   },
   primaryButton: {
-    backgroundColor: "#5b6bff",
-    borderRadius: 14,
+    backgroundColor: "#2563eb",
+    borderRadius: 16,
     paddingVertical: 14,
     alignItems: "center",
     marginTop: 8,
   },
+  primaryButtonPressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.99 }],
+  },
+  primaryButtonDisabled: {
+    opacity: 0.7,
+  },
   primaryButtonText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   backIconButton: {
     alignSelf: "center",

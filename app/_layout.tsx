@@ -57,6 +57,11 @@ export default function RootLayout() {
         <Stack.Screen name="reset-password" />
         <Stack.Screen name="change-password" />
         <Stack.Screen name="edit-profile" />
+        <Stack.Screen name="(customer-tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(organiser-tabs)"
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="organiser-dashboard" />
         <Stack.Screen name="customer_dashboard" />
         <Stack.Screen name="add-trip" />
@@ -64,6 +69,7 @@ export default function RootLayout() {
         <Stack.Screen name="booking-summary" />
         <Stack.Screen name="trip-actions" />
         <Stack.Screen name="trip-bookings" />
+        <Stack.Screen name="trip-details" />
         <Stack.Screen name="run-trip" />
         <Stack.Screen name="trip-reports" />
       </Stack>
